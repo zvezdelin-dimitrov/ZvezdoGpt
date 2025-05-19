@@ -1,0 +1,38 @@
+﻿@page "/"
+
+<PageTitle>ZvezdoGpt</PageTitle>
+
+<div class="container h-100 py-4 d-flex flex-column">
+    <h2 class="mb-4 text-center">ZvezdoGpt</h2>
+
+    <div class="flex-grow-1 overflow-auto" id="chat-container">
+        @foreach (var message in messages)
+        {
+            <div class="p-2 mb-2 rounded @((message is UserChatMessage) ? "bg-primary text-white" : "bg-light text-dark")">
+                <b>@(message is UserChatMessage ? "You:" : message is AssistantChatMessage ? "ZvezdoGpt:" : string.Empty)</b>
+                <span>@string.Join(string.Empty, message.Content.Select(x => x.Text))</span>
+            </div>
+        }
+
+        @if (currentResponses.Count > 0)
+        {
+            <div class="p-2 mb-2 rounded bg-light text-dark">
+                <b>ZvezdoGpt:</b>
+                @foreach (var response in currentResponses)
+                {
+                    @response.Text
+                }
+            </div>
+        }
+    </div>
+
+    <form @onsubmit="OnInputSubmit" class="input-group">
+        <input @bind="currentInput" class="form-control form-control-lg shadow-none" placeholder="Type your message..." autocomplete="off" />
+        <button class="btn btn-primary btn-lg" type="submit">Send</button>
+    </form>
+</div>
+
+<script>
+    const chatContainer = document.getElementById('chat-container');
+    new MutationObserver(() => chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' })).observe(chatContainer, { childList: true });
+</script>
