@@ -28,6 +28,12 @@
 
     <form @onsubmit="OnInputSubmit" class="input-group">
         <input @bind="currentInput" class="form-control form-control-lg shadow-none" placeholder="Type your message..." autocomplete="off" />
+        <select class="form-select form-select-lg shadow-none model-select" @bind="selectedModel">
+            @foreach (var model in availableModels)
+            {
+                <option value="@model">@model</option>
+            }
+        </select>
         <button class="btn btn-primary btn-lg" type="submit">Send</button>
     </form>
 </div>

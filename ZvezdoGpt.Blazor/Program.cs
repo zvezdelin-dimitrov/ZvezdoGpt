@@ -26,14 +26,13 @@ builder.Services.AddHttpClient(httpClientName)
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<OptionalAuthorizationMessageHandler>())
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<ApiKeyMessageHandler>());
 
-builder.Services.AddSingleton(serviceProvider => 
+builder.Services.AddSingleton(serviceProvider =>
     new OpenAIClient(
-        new ApiKeyCredential(" "), 
+        new ApiKeyCredential(" "),
         new OpenAIClientOptions
         {
             Transport = new HttpClientPipelineTransport(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(httpClientName)),
             Endpoint = new Uri(builder.Configuration["ApiUrl"])
-        })
-    .GetChatClient("gpt-4.1-nano"));
+        }));
 
 await builder.Build().RunAsync();
