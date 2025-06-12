@@ -5,6 +5,7 @@ using System.ClientModel;
 using System.ClientModel.Primitives;
 using ZvezdoGpt.Blazor;
 using ZvezdoGpt.Blazor.Handlers;
+using ZvezdoGpt.Blazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,6 +20,7 @@ builder.Services.AddMsalAuthentication(options =>
 
 builder.Services.AddScoped<OptionalAuthorizationMessageHandler>();
 builder.Services.AddScoped<ApiKeyMessageHandler>();
+builder.Services.AddScoped<ApiKeyService>();
 
 const string httpClientName = "httpClient";
 

@@ -1,10 +1,18 @@
-﻿namespace ZvezdoGpt.Blazor.Handlers;
+﻿using ZvezdoGpt.Blazor.Services;
 
-public class ApiKeyMessageHandler : DelegatingHandler
+namespace ZvezdoGpt.Blazor.Handlers;
+
+internal class ApiKeyMessageHandler(ApiKeyService apiKeyService) : DelegatingHandler
 {
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Add("X-API-KEY", "");
-        return base.SendAsync(request, cancellationToken);
+        var apiKey = await apiKeyService.GetApiKey();
+
+        if (!string.IsNullOrWhiteSpace(apiKey))
+        {
+            request.Headers.Add("X-API-KEY", apiKey);
+        }
+
+        return await base.SendAsync(request, cancellationToken);
     }
 }
