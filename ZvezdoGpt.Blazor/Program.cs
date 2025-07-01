@@ -22,9 +22,9 @@ builder.Services.AddScoped<OptionalAuthorizationMessageHandler>();
 builder.Services.AddScoped<ApiKeyMessageHandler>();
 builder.Services.AddScoped<ApiKeyService>();
 
-const string httpClientName = "httpClient";
+var apiUrl = new Uri(builder.Configuration["ApiUrl"]);
 
-builder.Services.AddHttpClient(httpClientName)
+builder.Services.AddHttpClient(Constants.HttpClientName, client => client.BaseAddress = apiUrl)
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<OptionalAuthorizationMessageHandler>())
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<ApiKeyMessageHandler>());
 
@@ -33,8 +33,8 @@ builder.Services.AddSingleton(serviceProvider =>
         new ApiKeyCredential(" "),
         new OpenAIClientOptions
         {
-            Transport = new HttpClientPipelineTransport(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(httpClientName)),
-            Endpoint = new Uri(builder.Configuration["ApiUrl"])
+            Transport = new HttpClientPipelineTransport(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(Constants.HttpClientName)),
+            Endpoint = apiUrl
         }));
 
 await builder.Build().RunAsync();

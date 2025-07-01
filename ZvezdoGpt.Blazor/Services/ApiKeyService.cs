@@ -1,10 +1,11 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 
 namespace ZvezdoGpt.Blazor.Services;
 
-internal class ApiKeyService(IJSRuntime js)
+internal class ApiKeyService(IJSRuntime js, IHttpClientFactory httpClientFactory, AuthenticationStateProvider authenticationProvider)
 {
-    private string apiKey;
+    private static string apiKey;
 
     public async ValueTask<string> GetApiKey()
     {
@@ -16,9 +17,28 @@ internal class ApiKeyService(IJSRuntime js)
         return apiKey;
     }
 
-    public ValueTask SetApiKey(string key)
+    public Task SetApiKey(string key)
     {
         apiKey = key;
-        return js.InvokeVoidAsync("localStorage.setItem", nameof(apiKey), key);
+
+        return Task.WhenAll(SaveApiKeyInLocalStorage(), SaveApiKeyOnServer());
+    }
+
+    private Task SaveApiKeyInLocalStorage()
+        => js.InvokeVoidAsync("localStorage.setItem", nameof(apiKey), apiKey).AsTask();
+
+    private async Task SaveApiKeyOnServer()
+    {
+        try
+        {
+            var authState = await authenticationProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                await httpClientFactory.CreateClient(Constants.HttpClientName).PostAsync("user/apikey", null);
+            }
+        }
+        catch
+        {
+        }
     }
 }

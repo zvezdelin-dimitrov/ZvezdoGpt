@@ -16,8 +16,9 @@ public partial class Settings
     {
         var existingKey = await ApiKeyService.GetApiKey();
 
-        if (!string.IsNullOrWhiteSpace(existingKey)
-            && !await JS.InvokeAsync<bool>("confirm", "Do you want to overwrite your saved API key?"))
+        if (existingKey == apiKey
+            || (!string.IsNullOrWhiteSpace(existingKey)
+                && !await JS.InvokeAsync<bool>("confirm", "Do you want to overwrite your saved API key?")))
         {
             return;
         }
