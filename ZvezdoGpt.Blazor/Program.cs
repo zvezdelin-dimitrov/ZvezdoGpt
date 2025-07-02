@@ -21,6 +21,7 @@ builder.Services.AddMsalAuthentication(options =>
 builder.Services.AddScoped<OptionalAuthorizationMessageHandler>();
 builder.Services.AddScoped<ApiKeyMessageHandler>();
 builder.Services.AddScoped<ApiKeyService>();
+builder.Services.AddScoped<PreferredModelService>();
 
 var apiUrl = new Uri(builder.Configuration["ApiUrl"]);
 

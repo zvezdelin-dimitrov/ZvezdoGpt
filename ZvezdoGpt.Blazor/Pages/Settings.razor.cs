@@ -14,7 +14,7 @@ public partial class Settings
 
     private async Task SaveApiKey()
     {
-        var existingKey = await ApiKeyService.GetApiKey();
+        var existingKey = await ApiKeyService.GetValue();
 
         if (existingKey == apiKey
             || (!string.IsNullOrWhiteSpace(existingKey)
@@ -23,7 +23,7 @@ public partial class Settings
             return;
         }
 
-        await ApiKeyService.SetApiKey(apiKey);
+        await ApiKeyService.SetValue(apiKey);
         apiKey = null;
     }
 }

@@ -6,7 +6,7 @@ internal class ApiKeyMessageHandler(ApiKeyService apiKeyService) : DelegatingHan
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var apiKey = await apiKeyService.GetApiKey();
+        var apiKey = await apiKeyService.GetValue();
 
         if (!string.IsNullOrWhiteSpace(apiKey))
         {
