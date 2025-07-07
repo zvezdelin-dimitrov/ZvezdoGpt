@@ -6,6 +6,7 @@ using System.ClientModel.Primitives;
 using ZvezdoGpt.Blazor;
 using ZvezdoGpt.Blazor.Handlers;
 using ZvezdoGpt.Blazor.Services;
+using ZvezdoGpt.Blazor.Utils;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

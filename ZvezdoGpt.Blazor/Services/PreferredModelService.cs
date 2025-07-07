@@ -11,5 +11,5 @@ internal class PreferredModelService(IJSRuntime js, IHttpClientFactory httpClien
 
     protected override string DefaultValue => "gpt-4.1-nano";
 
-    protected override Task PostToServerAsync(HttpClient client, string value) => client.PostAsJsonAsync("user/preferred-model", value);
+    protected override Task PostToServer(HttpClient client, string value) => client.PostAsJsonAsync("user/preferred-model", value);
 }

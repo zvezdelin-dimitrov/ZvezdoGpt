@@ -6,8 +6,7 @@ namespace ZvezdoGpt.Blazor.Pages;
 
 public partial class Home
 {
-    [Inject] private OpenAIClient OpenAIClient { get; set; }    
-    
+    [Inject] private OpenAIClient OpenAIClient { get; set; }
     private readonly List<ChatMessage> messages = [];
     private readonly List<ChatMessageContentPart> currentResponses = [];
     private string currentInput;

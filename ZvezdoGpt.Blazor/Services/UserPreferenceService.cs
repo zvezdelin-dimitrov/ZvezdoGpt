@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using ZvezdoGpt.Blazor.Utils;
 
 namespace ZvezdoGpt.Blazor.Services;
 
@@ -34,20 +35,20 @@ internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory 
     {
         cache[CacheKey] = value;
 
-        return Task.WhenAll(SaveInLocalStorageAsync(), SaveOnServerAsync());
+        return Task.WhenAll(SaveInLocalStorage(), SaveOnServer());
     }
 
-    private Task SaveInLocalStorageAsync()
+    private Task SaveInLocalStorage()
         => js.InvokeVoidAsync("localStorage.setItem", CacheKey, cache[CacheKey]).AsTask();
 
-    private async Task SaveOnServerAsync()
+    private async Task SaveOnServer()
     {
         try
         {
             var authState = await authenticationProvider.GetAuthenticationStateAsync();
             if (authState.User.Identity.IsAuthenticated)
             {
-                await PostToServerAsync(httpClientFactory.CreateClient(Constants.HttpClientName), cache[CacheKey]);
+                await PostToServer(httpClientFactory.CreateClient(Constants.HttpClientName), cache[CacheKey]);
             }
         }
         catch
@@ -55,5 +56,5 @@ internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory 
         }
     }
 
-    protected abstract Task PostToServerAsync(HttpClient client, string value);
+    protected abstract Task PostToServer(HttpClient client, string value);
 }

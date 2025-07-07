@@ -8,5 +8,5 @@ internal class ApiKeyService(IJSRuntime js, IHttpClientFactory httpClientFactory
 {
     protected override string CacheKey => "apiKey";
 
-    protected override Task PostToServerAsync(HttpClient client, string value) => client.PostAsync("user/apikey", null);
+    protected override Task PostToServer(HttpClient client, string value) => client.PostAsync("user/apikey", null);
 }
