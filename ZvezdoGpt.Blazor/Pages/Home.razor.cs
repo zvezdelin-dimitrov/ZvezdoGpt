@@ -1,29 +1,27 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OpenAI;
 using OpenAI.Chat;
+using ZvezdoGpt.Blazor.Services;
 
 namespace ZvezdoGpt.Blazor.Pages;
 
 public partial class Home
 {
     [Inject] private OpenAIClient OpenAIClient { get; set; }
+
+    [Inject] private AvailableModelsInitializer AvailableModelsInitializer { get; set; }
+
     private readonly List<ChatMessage> messages = [];
     private readonly List<ChatMessageContentPart> currentResponses = [];
     private string currentInput;
 
-    private readonly HashSet<string> availableModels = ["gpt-4.1-nano"];
-    private string selectedModel = "gpt-4.1-nano";
+    private readonly HashSet<string> availableModels = [];
+    private string selectedModel;
 
     protected override async Task OnInitializedAsync()
     {
-        var models = (await OpenAIClient.GetOpenAIModelClient().GetModelsAsync()).Value.Select(m => m.Id).ToHashSet();
-
-        availableModels.RemoveWhere(m => !models.Contains(m));
-
-        foreach (var model in models)
-        {
-            availableModels.Add(model);
-        }
+        await AvailableModelsInitializer.Initialize(availableModels);
+        selectedModel = availableModels.FirstOrDefault();
     }
 
     private async Task SendMessage()
