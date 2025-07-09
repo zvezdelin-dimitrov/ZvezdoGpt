@@ -15,14 +15,16 @@ public partial class Home
     private readonly List<ChatMessageContentPart> currentResponses = [];
     private string currentInput;
 
-    private readonly HashSet<string> availableModels = [];
+    private HashSet<string> availableModels = [];
     private string selectedModel;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await AvailableModelsInitializer.Initialize(availableModels);
-        selectedModel = availableModels.FirstOrDefault();
-    }
+    protected override Task OnInitializedAsync() => AvailableModelsInitializer.Initialize(
+        models => availableModels = models,
+        model => 
+        {
+            selectedModel = model;
+            StateHasChanged();
+        });
 
     private async Task SendMessage()
     {
