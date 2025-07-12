@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using ZvezdoGpt.Blazor.Utils;
 
 namespace ZvezdoGpt.Blazor.Services;
 
@@ -8,5 +9,5 @@ internal class ApiKeyService(IJSRuntime js, IHttpClientFactory httpClientFactory
 {
     protected override string CacheKey => "apiKey";
 
-    protected override Task PostToServer(HttpClient client, string value) => client.PostAsync("user/apikey", null);
+    protected override Task PostToServer(HttpClient client, string value) => client.PostApiKey();
 }

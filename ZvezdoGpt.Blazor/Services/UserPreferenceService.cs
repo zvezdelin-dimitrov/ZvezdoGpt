@@ -48,7 +48,7 @@ internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory 
             var authState = await authenticationProvider.GetAuthenticationStateAsync();
             if (authState.User.Identity.IsAuthenticated)
             {
-                await PostToServer(httpClientFactory.CreateClient(Constants.HttpClientName), cache[CacheKey]);
+                await PostToServer(httpClientFactory.CreateClient(), cache[CacheKey]);
             }
         }
         catch

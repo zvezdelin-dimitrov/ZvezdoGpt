@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System.Net.Http.Json;
+using ZvezdoGpt.Blazor.Utils;
 
 namespace ZvezdoGpt.Blazor.Services;
 
@@ -11,5 +12,5 @@ internal class PreferredModelService(IJSRuntime js, IHttpClientFactory httpClien
 
     protected override string DefaultValue => "gpt-4.1-nano";
 
-    protected override Task PostToServer(HttpClient client, string value) => client.PostAsJsonAsync("user/preferred-model", value);
+    protected override Task PostToServer(HttpClient client, string value) => client.PostPreferredModel(value);
 }

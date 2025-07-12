@@ -6,7 +6,6 @@ using System.ClientModel.Primitives;
 using ZvezdoGpt.Blazor;
 using ZvezdoGpt.Blazor.Handlers;
 using ZvezdoGpt.Blazor.Services;
-using ZvezdoGpt.Blazor.Utils;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -27,7 +26,7 @@ builder.Services.AddScoped<AvailableModelsInitializer>();
 
 var apiUrl = new Uri(builder.Configuration["ApiUrl"]);
 
-builder.Services.AddHttpClient(Constants.HttpClientName, client => client.BaseAddress = apiUrl)
+builder.Services.AddHttpClient(string.Empty, client => client.BaseAddress = apiUrl)
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<OptionalAuthorizationMessageHandler>())
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<ApiKeyMessageHandler>());
 
@@ -36,7 +35,7 @@ builder.Services.AddSingleton(serviceProvider =>
         new ApiKeyCredential(" "),
         new OpenAIClientOptions
         {
-            Transport = new HttpClientPipelineTransport(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(Constants.HttpClientName)),
+            Transport = new HttpClientPipelineTransport(serviceProvider.GetRequiredService<IHttpClientFactory>().CreateClient()),
             Endpoint = apiUrl
         }));
 
