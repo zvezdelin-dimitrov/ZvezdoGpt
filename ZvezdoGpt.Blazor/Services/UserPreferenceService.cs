@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
 using ZvezdoGpt.Blazor.Utils;
 
 namespace ZvezdoGpt.Blazor.Services;
 
-internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory httpClientFactory, AuthenticationStateProvider authenticationProvider)
+internal abstract class UserPreferenceService(LocalStorageService localStorage, IHttpClientFactory httpClientFactory, AuthenticationStateProvider authenticationProvider)
 {
     private static readonly Dictionary<string, string> cache = [];
 
@@ -16,7 +15,7 @@ internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory 
     {
         if (!cache.TryGetValue(CacheKey, out var value))
         {
-            var storedValue = await js.InvokeAsync<string>("localStorage.getItem", CacheKey);
+            var storedValue = await GetLocalStorageValue();
 
             if (!string.IsNullOrEmpty(storedValue))
             {
@@ -31,15 +30,17 @@ internal abstract class UserPreferenceService(IJSRuntime js, IHttpClientFactory 
         return value;
     }
 
-    public Task SetValue(string value)
+    public ValueTask<string> GetLocalStorageValue() => localStorage.GetItem(CacheKey);
+
+    public Task SetValue(string value) => Task.WhenAll(SetLocalOnly(value).AsTask(), SaveOnServer());
+
+    public ValueTask SetLocalOnly(string value)
     {
         cache[CacheKey] = value;
-
-        return Task.WhenAll(SaveInLocalStorage(), SaveOnServer());
+        return SaveInLocalStorage();
     }
 
-    private Task SaveInLocalStorage()
-        => js.InvokeVoidAsync("localStorage.setItem", CacheKey, cache[CacheKey]).AsTask();
+    private ValueTask SaveInLocalStorage() => localStorage.SetItem(CacheKey, cache[CacheKey]);
 
     private async Task SaveOnServer()
     {

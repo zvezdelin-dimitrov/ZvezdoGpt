@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using System.Net.Http.Json;
 using ZvezdoGpt.Blazor.Utils;
 
 namespace ZvezdoGpt.Blazor.Services;
 
-internal class PreferredModelService(IJSRuntime js, IHttpClientFactory httpClientFactory, AuthenticationStateProvider authenticationProvider)
-    : UserPreferenceService(js, httpClientFactory, authenticationProvider)
+internal class PreferredModelService(LocalStorageService localStorage, IHttpClientFactory httpClientFactory, AuthenticationStateProvider authenticationProvider)
+    : UserPreferenceService(localStorage, httpClientFactory, authenticationProvider)
 {
     protected override string CacheKey => "preferredModel";
 
