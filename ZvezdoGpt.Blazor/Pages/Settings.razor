@@ -11,4 +11,17 @@
             <button class="btn btn-primary" @onclick="SaveApiKey">Save</button>
         </div>
     </div>
+
+    <div class="mb-3">
+        <label for="preferred-model" class="form-label fs-4">Preferred Model</label>
+        <div class="input-group">
+            <select id="preferred-model" class="form-select" @bind="selectedModel">
+                @foreach (var model in availableModels)
+                {
+                    <option value="@model">@model</option>
+                }
+            </select>
+            <button class="btn btn-primary" @onclick="SavePreferredModel">Save</button>
+        </div>
+    </div>
 </div>

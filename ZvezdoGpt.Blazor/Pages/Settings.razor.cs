@@ -10,7 +10,21 @@ public partial class Settings
 
     [Inject] private ApiKeyService ApiKeyService { get; set; }
 
+    [Inject] private PreferredModelService PreferredModelService { get; set; }
+
+    [Inject] private AvailableModelsInitializer AvailableModelsInitializer { get; set; }
+
+    private HashSet<string> availableModels = [];
+    private string selectedModel;
     private string apiKey;
+
+    protected override Task OnInitializedAsync() => AvailableModelsInitializer.Initialize(
+        models => availableModels = models,
+        model =>
+        {
+            selectedModel = model;
+            StateHasChanged();
+        });
 
     private async Task SaveApiKey()
     {
@@ -25,5 +39,14 @@ public partial class Settings
 
         await ApiKeyService.SetValue(apiKey);
         apiKey = null;
+    }
+
+    private async Task SavePreferredModel()
+    {
+        var preferredModel = await PreferredModelService.GetValue();
+        if (preferredModel != selectedModel)
+        {
+            await PreferredModelService.SetValue(selectedModel);
+        }
     }
 }
