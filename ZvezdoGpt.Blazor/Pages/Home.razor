@@ -9,19 +9,14 @@
         @foreach (var message in messages)
         {
             <div class="p-2 mb-2 rounded @((message is UserChatMessage) ? "bg-primary text-white" : "bg-light text-dark")">
-                <b>@(message is UserChatMessage ? "You:" : message is AssistantChatMessage ? "ZvezdoGpt:" : string.Empty)</b>
-                <span>@string.Join(string.Empty, message.Content.Select(x => x.Text))</span>
+                @((MarkupString)message.ToMarkdowHtml())
             </div>
         }
 
         @if (currentResponses.Count > 0)
         {
             <div class="p-2 mb-2 rounded bg-light text-dark">
-                <b>ZvezdoGpt:</b>
-                @foreach (var response in currentResponses)
-                {
-                    @response.Text
-                }
+                @((MarkupString)currentResponses.ToMarkdownHtml())
             </div>
         }
     </div>
