@@ -1,6 +1,6 @@
 ﻿@page "/authentication/{action}"
 
-<RemoteAuthenticatorView Action="@Action">
+<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLogInSucceeded">
     <LoggingIn />
     <LogInFailed />
     <LogOut />
@@ -8,7 +8,3 @@
         <RedirectToHome />
     </LogOutSucceeded>
 </RemoteAuthenticatorView>
-
-@code {
-    [Parameter] public string Action { get; set; }
-}
