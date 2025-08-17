@@ -4,6 +4,14 @@
 
 <div class="container h-100 py-4 d-flex flex-column">
     <h2 class="mb-4 text-center">Settings</h2>
+
+    <div class="mb-5 fs-4">
+        <AuthorizeView>
+            <Authorized>Logged in as @context.User.Identity.Name</Authorized>
+            <NotAuthorized>User not logged in</NotAuthorized>
+        </AuthorizeView>
+    </div>
+
     <div class="mb-3">
         <label for="apiKeyInput" class="form-label fs-4">API Key</label>
         <div class="input-group">
