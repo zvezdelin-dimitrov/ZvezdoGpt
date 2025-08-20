@@ -7,6 +7,10 @@ html, body, #app, .page, .content {
     min-height: 0;
 }
 
+p {
+    margin: 0;
+}
+
 #blazor-error-ui {
     color-scheme: light only;
     background: lightyellow;
